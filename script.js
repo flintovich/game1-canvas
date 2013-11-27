@@ -8,9 +8,6 @@ jQuery(document).ready(function ($) {
     var x_click;
 
 
-
-
-
     var canvas = document.getElementById("canvas");
 
     // init
