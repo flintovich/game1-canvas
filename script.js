@@ -5,19 +5,25 @@ jQuery(document).ready(function ($) {
     var roadSpeed = 2;
     var startRoad = -9200;
     var x = 600;
-    var x_click;
-
-
+    var ctx;
     var canvas = document.getElementById("canvas");
+    var startBugPosition = 0;
+
 
     // init
-    var ctx = canvas.getContext('2d');
+    function updateCanvas(){
+        ctx = canvas.getContext('2d');
+        changeAnimate();
+    }
+    (function animationLoop(){
+        updateCanvas();
+        requestAnimationFrame(animationLoop, '#canvas');
+    })();
 
     canvas.height = windowHeight;
     canvas.width = windowWidth;
 
-    ctx.fillRect(x, windowHeight -200, 81, 200);
-
+    //ctx.fillRect(x, windowHeight -200, 81, 200);
 
     $('#wrapper').mousemove(function(e){
         ctx.clearRect(x, windowHeight -200, 81, 200);
@@ -45,31 +51,29 @@ jQuery(document).ready(function ($) {
     }
 
 
-
-
-
-
-    function changeRoad(){
-     $('#canvas').css('backgroundPosition','0' +startRoad+'px');
+    function changeAnimate(){
+        // road
+        $('#canvas').css('backgroundPosition','0' +startRoad+'px');
         startRoad = startRoad + roadSpeed;
+
+        // move bag
+        randBug();
     }
-    (function animationLoop(){
-        changeRoad();
-        requestAnimationFrame(animationLoop, '#canvas');
-    })();
 
 
+
+    // click
     $('#wrapper').click(function(e){
         var i = 220;
         function rocket(){
             // remove rocket
-            if(i == 600){
+            if(i == windowHeight){
                 ctx.clearRect(e.clientX + 38, windowHeight -i, 4, 20);
                 return false
             }
 
             ctx.clearRect(e.clientX + 38, windowHeight -i, 4, 20);
-            i+=5;
+            i+=10;
             ctx.fillRect(e.clientX + 38, windowHeight -i, 4, 20);
         }
         (function animationLoop(){
@@ -77,5 +81,12 @@ jQuery(document).ready(function ($) {
             requestAnimationFrame(animationLoop, '#canvas');
         })();
     });
+
+    // create rand bag
+    function randBug(){
+        ctx.clearRect(500, startBugPosition, 50, 50);
+        startBugPosition+=8;
+        ctx.fillRect(500, startBugPosition, 50, 50);
+    }
 
 });
